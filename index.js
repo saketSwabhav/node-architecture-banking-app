@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 7000;
 
 intializeApp(app);
-await connectToDatabase()
+connectToDatabase()
 export default app;
 
 app.listen(port, () => {

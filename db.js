@@ -11,7 +11,7 @@ const sequelize = new Sequelize(database, username, password, {
   },
   dialect,
   host,
-  logging: !isDev,
+  logging: msg => isDev?logger.debug(msg):logger.info(msg),
 });
 
 export async function connectToDatabase() {
