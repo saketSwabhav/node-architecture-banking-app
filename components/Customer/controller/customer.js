@@ -1,4 +1,4 @@
-import Customer from "../../../view/Customer.js";
+import { HttpStatusCode } from "../../../constants/enums.js";
 
 class CustomerController {
   constructor(logger, service) {
@@ -16,19 +16,12 @@ class CustomerController {
           .send("body cannot be empty");
       }
       const { firstName, lastName, totalBalance } = req.body;
-      let customer = new Customer(firstName, lastName, totalBalance);
 
-      this.service
-        .addCustomer(customer)
-        .then((val) => {
-          return res.status(HttpStatusCode.CREATED).send(null);
-        })
-        .catch((err) => {
-          this.logger.error(err);
-          return res.status(HttpStatusCode.INTERNAL_SERVER).send(err);
-        });
+      await this.service.addCustomer(firstName, lastName, totalBalance);
+
+      return res.status(HttpStatusCode.CREATED).send(null);
     } catch (e) {
-      this.logger.error(e);
+      next(e);
     }
   };
 
@@ -36,18 +29,10 @@ class CustomerController {
     try {
       this.logger.info("========= get customers called =================");
 
-      this.service
-        .getCustomers()
-        .then((val) => {
-          console.log(val);
-          return res.status(HttpStatusCode.OK).send(val);
-        })
-        .catch((err) => {
-          this.logger.error(err);
-          return res.status(HttpStatusCode.INTERNAL_SERVER).send(err);
-        });
+      let val = await this.service.getCustomers();
+      return res.status(HttpStatusCode.OK).send(val);
     } catch (e) {
-      this.logger.error(e);
+      next(e);
     }
   };
 
@@ -62,21 +47,13 @@ class CustomerController {
       }
 
       const { firstName, lastName, totalBalance } = req.body;
-      let customer = new Customer(firstName, lastName, totalBalance);
-      customer.id = req.params.customerID;
+      // let customer = new Customer(firstName, lastName, totalBalance);
+      const id = req.params.customerID;
 
-      this.service
-        .updateCustomer(customer)
-        .then((val) => {
-          // console.log(val);
-          return res.status(HttpStatusCode.OK).send(null);
-        })
-        .catch((err) => {
-          this.logger.error(err);
-          return res.status(HttpStatusCode.INTERNAL_SERVER).send(err);
-        });
+      await this.service.updateCustomer(id, firstName, lastName, totalBalance);
+      return res.status(HttpStatusCode.OK).send(null);
     } catch (e) {
-      this.logger.error(e);
+      next(e);
     }
   };
 
@@ -86,19 +63,96 @@ class CustomerController {
     try {
       let customerID = req.params.customerID;
 
-      this.service
-        .deleteCustomer(customerID)
-        .then((val) => {
-          // console.log(val);
-          return res.status(HttpStatusCode.OK).send(null);
-        })
-        .catch((err) => {
-          this.logger.error(err);
-          return res.status(HttpStatusCode.INTERNAL_SERVER).send(err);
-        });
+      await this.service.deleteCustomer(customerID);
+      return res.status(HttpStatusCode.OK).send(null);
     } catch (e) {
-      this.logger.error(e);
+      next(e);
+    }
+  };
+
+  withdraw = async (req, res, next) => {
+    try {
+      this.logger.info("========= withdraw called =================");
+
+      if (!Object.keys(req.body).length) {
+        return res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send("body cannot be empty");
+      }
+      const { amount } = req.body;
+      const id = req.params.customerID;
+
+      await this.service.withdraw(id, amount);
+      return res.status(HttpStatusCode.CREATED).send(null);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  deposit = async (req, res, next) => {
+    try {
+      this.logger.info("========= deposit called =================");
+
+      if (!Object.keys(req.body).length) {
+        return res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send("body cannot be empty");
+      }
+
+      const { amount } = req.body;
+      const id = req.params.customerID;
+
+      await this.service.deposit(id, amount);
+
+      return res.status(HttpStatusCode.ACCEPTED).send(null);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  transfer = async (req, res, next) => {
+    try {
+      this.logger.info("========= transfer called =================");
+
+      if (!Object.keys(req.body).length) {
+        return res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send("body cannot be empty");
+      }
+
+      const { reciverID, amount } = req.body;
+      const id = req.params.customerID;
+
+      await this.service.transfer(reciverID, id, amount);
+      return res.status(HttpStatusCode.CREATED).send(null);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  getbalance = async (req, res, next) => {
+    try {
+      this.logger.info("========= get balance called =================");
+
+      let val = await this.service.getBalance(req.params.customerID);
+      return res.status(HttpStatusCode.OK).send(val);
+
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  getPassBook = async (req, res, next) => {
+    try {
+      this.logger.info("========= get passbook called =================");
+
+      let val = await this.service.getPassBook(req.params.customerID);
+
+      return res.status(HttpStatusCode.OK).send(val);
+    } catch (e) {
+      next(e);
     }
   };
 }
+
 export default CustomerController;

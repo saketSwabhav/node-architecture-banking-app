@@ -30,7 +30,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     const error = errorHandler(err);
     res.status(error.status || 500).send(error);
   } catch (e) {
-    logger.error(err);
+    logger.error(e);
   }
 };
 

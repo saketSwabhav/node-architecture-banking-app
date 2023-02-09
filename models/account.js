@@ -9,7 +9,9 @@ import  sequelize  from "../db.js";
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Account.hasMany(models.Customer)
+      // Account.hasMany(models.Customer,{foreignKey:"customer_id"})
+      Account.belongsTo(models.Customer)
+      // Account.hasMany(models.PassBook)
       // define association here
     }
   }
@@ -21,35 +23,24 @@ import  sequelize  from "../db.js";
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      bank_id: {
+      bankID: {
         type: DataTypes.UUID,
         references: {
           model: 'banks', // 'banks' refers to table name
           key: 'id', // 'id' refers to column name in banks table
-       }
+       },
+       field: "bank_id",
       },
-      customer_id: {
+      customerID: {
         type: DataTypes.UUID,
         references: {
           model: 'customers', // 'customers' refers to table name
           key: 'id', // 'id' refers to column name in customers table
-       }
+       },
+       field: "customer_id",
       },
       balance: {
         type: DataTypes.INTEGER,
-      },
-      created_at: {
-        allowNull: true,
-        type: DataTypes.DATE,
-      },
-      updated_at: {
-        allowNull: true,
-        type: DataTypes.DATE,
-      },
-      deletedAt: {
-        allowNull: true,
-        type: DataTypes.DATE,
-        field: "deleted_at",
       },
     },
     {
@@ -57,8 +48,18 @@ import  sequelize  from "../db.js";
       modelName: "Account",
       tableName: "accounts",
       underscored: true,
-      paranoid:true
-    }
+      paranoid:true,
+      timestamps:true,
+      
+    },
+  //   weddings.beforeCreate(async (data, options) => {
+  //     data.Id = await Buffer.from(utility.generateUID().replace('-', ''), 'hex');
+
+  // });
+
+    // Account.beforeCreate(async (data, options) => {
+    //   data.id = v4()
+    // })
   );
 
 export default Account

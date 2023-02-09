@@ -1,5 +1,4 @@
 import { HttpStatusCode } from "../../../constants/enums.js";
-import Account from "../../../view/Account.js";
 
 class AccountController {
   constructor(logger, service) {
@@ -17,41 +16,22 @@ class AccountController {
       }
 
       let { bankID, customerID, balance } = req.body;
+      await this.service.addAccount(bankID, customerID, balance);
 
-      let acc = Account(bankID, customerID, balance);
-      this.service
-        .addAccount(acc)
-        .then((val) => {
-          return res.status(HttpStatusCode.OK).send(null);
-        })
-        .catch((err) => {
-          this.logger.error(err);
-          return res.status(HttpStatusCode.INTERNAL_SERVER).send(err);
-        });
-
-      // return res.status(HttpStatusCode.CREATED).send(null);
+      return res.status(HttpStatusCode.OK).send(null);
     } catch (e) {
-      this.logger.error(err);
+      next(e);
     }
   };
 
   getAccounts = async (req, res, next) => {
     this.logger.info("========= get accounts called =================");
     try {
-      this.service
-        .getAccounts()
-        .then((val) => {
-          console.log(val);
-          return res.status(HttpStatusCode.OK).send(val);
-        })
-        .catch((err) => {
-          this.logger.error(err);
-          return res.status(HttpStatusCode.INTERNAL_SERVER).send(err);
-        });
+      let val = await this.service.getAccounts();
+      return res.status(HttpStatusCode.OK).send(val);
     } catch (e) {
-      this.logger.error(e);
+      next(e);
     }
-    // res.status(HttpStatusCode.OK).send("");
   };
 
   updateAccount = async (req, res, next) => {
@@ -62,19 +42,11 @@ class AccountController {
       }
       let { bankID, customerID, balance } = req.body;
 
-      let acc = Account(bankID, customerID, balance);
-
-      this.service
-        .updateAccount(acc)
-        .then((val) => {
-          return res.status(HttpStatusCode.OK).send(null);
-        })
-        .catch((err) => {
-          this.logger.error(err);
-          return res.status(HttpStatusCode.INTERNAL_SERVER).send(err);
-        });
+      const id = req.params.accountID;
+      await this.service.updateAccount(id, bankID, customerID, balance);
+      return res.status(HttpStatusCode.OK).send(null);
     } catch (e) {
-      this.logger.error(e);
+      next(e);
     }
   };
 
@@ -82,19 +54,14 @@ class AccountController {
     this.logger.info("========= delete account called =================");
 
     try {
-        let accountID = req.params.bankID
+      let accountID = req.params.accountID;
 
-      this.service.deleteAccount(accountID).then(val=>{
+      await this.service.deleteAccount(accountID);
 
-        return res.status(HttpStatusCode.OK).send(null)
-    }).catch(err=>{
-      this.logger.error(err);
-      return res.status(HttpStatusCode.INTERNAL_SERVER).send(err)
-
-    })
+      return res.status(HttpStatusCode.OK).send(null);
 
     } catch (e) {
-      this.logger.error(e);
+      next(e)
     }
   };
 }

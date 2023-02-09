@@ -1,8 +1,7 @@
 import { HttpStatusCode } from "../../../constants/enums.js";
-import Bank from "../../../view/Bank.js";
 
 export class BankController {
-  constructor(logger,service) {
+  constructor(logger, service) {
     this.logger = logger;
     this.service = service;
   }
@@ -12,23 +11,16 @@ export class BankController {
       this.logger.info("========= add bank called =================");
 
       if (!Object.keys(req.body).length) {
-        return res.status(HttpStatusCode.BAD_REQUEST).send("body cannot be empty");
+        return res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send("body cannot be empty");
       }
       const { fullName, abbrevation } = req.body;
-      let bank = new Bank(fullName,abbrevation)
-      
-      this.service.addBank(bank).then(val=>{
-          return res.status(HttpStatusCode.CREATED).send(null)
 
-      }).catch(err=>{
-      this.logger.error(err);
-        return res.status(HttpStatusCode.INTERNAL_SERVER).send(err)
-        
-      })
-
-
+      await this.service.addBank(fullName, abbrevation);
+      return res.status(HttpStatusCode.CREATED).send(null);
     } catch (e) {
-      this.logger.error(e);
+      next(e);
     }
   };
 
@@ -36,17 +28,10 @@ export class BankController {
     try {
       this.logger.info("========= get banks called =================");
 
-      this.service.getBanks().then(val=>{
-        console.log(val);
-        return res.status(HttpStatusCode.OK).send(val)
-    }).catch(err=>{
-      this.logger.error(err);
-      return res.status(HttpStatusCode.INTERNAL_SERVER).send(err)
-
-    })
-      
+      let val = await this.service.getBanks();
+      return res.status(HttpStatusCode.OK).send(val);
     } catch (e) {
-      this.logger.error(e);
+      next(e);
     }
   };
 
@@ -55,23 +40,19 @@ export class BankController {
       this.logger.info("========= update bank called =================");
 
       if (!Object.keys(req.body).length) {
-        return res.status(HttpStatusCode.BAD_REQUEST).send("body cannot be empty");
+        return res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send("body cannot be empty");
       }
 
       const { fullName, abbrevation } = req.body;
-      let bank = new Bank(fullName,abbrevation)
-      bank.id = req.params.bankID
 
-      this.service.updateBank(bank).then(val=>{
-        // console.log(val);
-        return res.status(HttpStatusCode.OK).send(null)
-    }).catch(err=>{
-      this.logger.error(err);
-      return res.status(HttpStatusCode.INTERNAL_SERVER).send(err)
+      const id = req.params.bankID;
 
-    })
+      await this.service.updateBank(id, fullName, abbrevation);
+      return res.status(HttpStatusCode.OK).send(null);
     } catch (e) {
-      this.logger.error(e);
+      next(e);
     }
   };
 
@@ -79,19 +60,12 @@ export class BankController {
     this.logger.info("========= delete bank called =================");
 
     try {
-        let bankID = req.params.bankID
+      let bankID = req.params.bankID;
 
-      this.service.deleteBank(bankID).then(val=>{
-        // console.log(val);
-        return res.status(HttpStatusCode.OK).send(null)
-    }).catch(err=>{
-      this.logger.error(err);
-      return res.status(HttpStatusCode.INTERNAL_SERVER).send(err)
-
-    })
-
+      await this.service.deleteBank(bankID);
+      return res.status(HttpStatusCode.OK).send(null);
     } catch (e) {
-      this.logger.error(e);
+      next(e)
     }
   };
 }

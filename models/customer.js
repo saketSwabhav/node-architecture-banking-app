@@ -10,7 +10,11 @@ import  sequelize  from "../db.js";
      */
     static associate(models) {
       // define association here
+      // Customer.hasMany(models.Account)
+      // Customer.belongsTo(models.Account)
       Customer.hasMany(models.Account)
+      // Customer.belongsToMany(models.Bank,{through:"accounts"})
+      // Customer.hasOne(models.PassBook,{through:"accounts"})
     }
   }
   Customer.init(
@@ -37,6 +41,8 @@ import  sequelize  from "../db.js";
       sequelize,
       modelName: "Customer",
       tableName:"customers",
+      timestamps:true,
+      paranoid:true,
       underscored:true,
 
     }

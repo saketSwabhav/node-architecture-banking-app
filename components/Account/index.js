@@ -10,5 +10,5 @@ const controller = new AccountController(logger,service)
 
 accountRoute.post('/',controller.addAccount)
 accountRoute.get('/',controller.getAccounts)
-accountRoute.get('/:accountID',controller.getAccounts)
-accountRoute.delete('/:accountID',controller.getAccounts)
+accountRoute.put('/:accountID',controller.updateAccount)
+accountRoute.delete('/:accountID',controller.deleteAccount)

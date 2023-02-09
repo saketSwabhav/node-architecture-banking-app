@@ -5,14 +5,12 @@ import AccountDTO from "../../../view/Account.js";
 class AccountService {
   constructor() {}
 
-  async addAccount(account) {
+  async addAccount(bankID, customerID, balance) {
     try {
-      console.log(account);
-      let temp = await Account.create(account);
-      console.log("temp", temp);
+      await new AccountDTO(null,bankID, customerID, balance).add();
+
     } catch (e) {
-      console.log(e);
-      return e;
+      throw new Error(e);
     }
   }
 
@@ -22,20 +20,14 @@ class AccountService {
       console.log(newObj);
       return newObj;
     } catch (e) {
-      console.log(e);
-      return e;
+      throw new Error(e);
     }
   }
-  async updateAccount(account) {
+
+  async updateAccount(id, bankID, customerID, balance) {
     try {
-      console.log(account);
-      let temp = await Account.update(account, {
-        where: {
-          deletedAt: null,
-          id: account.id,
-        },
-        paranoid: false,
-      });
+      // console.log(account);
+      let temp = await new AccountDTO(id, bankID, customerID, balance).update()
 
       return temp;
     } catch (e) {
@@ -46,16 +38,11 @@ class AccountService {
 
   async deleteAccount(accountID) {
     try {
-      let temp = await Account.destroy({
-        where: {
-          id: accountID,
-        },
-      });
-
+      let temp = await AccountDTO.delete(accountID)
       return temp;
+
     } catch (e) {
-      console.log(e);
-      return e;
+      throw new Error(e);
     }
   }
 }

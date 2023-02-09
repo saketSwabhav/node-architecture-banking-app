@@ -1,66 +1,44 @@
-import Bank from "../../../models/bank.js";
-
+// import Bank from "../../../models/bank.js";
+import BankDTO from "../../../view/Bank.js";
 class BankService {
   constructor(db) {
     // this.db = db;
   }
-  async addBank(bank) {
+  async addBank(fullName, abbrevation) {
     try {
-      console.log(bank);
-      let temp = await Bank.create(bank);
-      console.log("temp",temp);
-    //   this.db.Bank.create(bank)
+      await new BankDTO(null,fullName, abbrevation).add();
     } catch (e) {
-        console.log(e);
-      return e;
+      throw new Error(e);
     }
   }
 
   async getBanks() {
     try {
-      let temp = await Bank.findAll();
+      let temp = await BankDTO.getAll();
       console.log(temp);
       return temp
-    //   this.db.Bank.create(bank)
     } catch (e) {
-        console.log(e);
-      return e;
+      throw new Error(e);
+
     }
   }
 
-  async updateBank(bank) {
+  async updateBank(id,fullName, abbrevation) {
     try {
       console.log(bank);
-      let temp = await Bank.update(bank,{
-        where: {
-            deletedAt:null,
-          id: bank.id,
-          
-        },paranoid:false});
-
-    //   console.log(temp);
+      let temp = await new BankDTO(id,fullName, abbrevation).update();
       return temp
-    //   this.db.Bank.create(bank)
     } catch (e) {
-        console.log(e);
-      return e;
+      throw new Error(e);
     }
   }
 
   async deleteBank(bankID) {
     try {
-    //   console.log(bank);
-      let temp = await Bank.destroy({
-        where: {
-          id: bankID
-        }});
+      await BankDTO.delete(bankID)
 
-    //   console.log(temp);
-      return temp
-    //   this.db.Bank.create(bank)
     } catch (e) {
-        console.log(e);
-      return e;
+      throw new Error(e)
     }
   }
 
