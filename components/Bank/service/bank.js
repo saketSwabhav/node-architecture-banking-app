@@ -25,7 +25,6 @@ class BankService {
 
   async updateBank(id,fullName, abbrevation) {
     try {
-      console.log(bank);
       let temp = await new BankDTO(id,fullName, abbrevation).update();
       return temp
     } catch (e) {

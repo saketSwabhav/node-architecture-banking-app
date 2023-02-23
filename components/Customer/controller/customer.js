@@ -15,9 +15,9 @@ class CustomerController {
           .status(HttpStatusCode.BAD_REQUEST)
           .send("body cannot be empty");
       }
-      const { firstName, lastName, totalBalance } = req.body;
+      const { firstName, lastName, totalBalance,email,roleName,password } = req.body;
 
-      await this.service.addCustomer(firstName, lastName, totalBalance);
+      await this.service.addCustomer(firstName, lastName, totalBalance,email,roleName,password);
 
       return res.status(HttpStatusCode.CREATED).send(null);
     } catch (e) {
@@ -46,11 +46,11 @@ class CustomerController {
           .send("body cannot be empty");
       }
 
-      const { firstName, lastName, totalBalance } = req.body;
+      const { firstName, lastName, totalBalance,email,password } = req.body;
       // let customer = new Customer(firstName, lastName, totalBalance);
       const id = req.params.customerID;
 
-      await this.service.updateCustomer(id, firstName, lastName, totalBalance);
+      await this.service.updateCustomer(id, firstName, lastName, totalBalance,email,password);
       return res.status(HttpStatusCode.OK).send(null);
     } catch (e) {
       next(e);
@@ -153,6 +153,19 @@ class CustomerController {
       next(e);
     }
   };
+
+
+getCustomer = async (req, res, next) => {
+  try {
+    this.logger.info("========= get customer called =================");
+
+    let val = await this.service.getCustomer(req.params.customerID);
+
+    return res.status(HttpStatusCode.OK).send(val);
+  } catch (e) {
+    next(e);
+  }
+};
 }
 
 export default CustomerController;

@@ -10,10 +10,12 @@ class BankDTO {
     this.abbreviation = abbr;
   }
 
-  static async getAll() {
+  static async getAll(params) {
     try {
         // console.log(sequelize.models);
-      let array = await sequelize.models.Bank.findAll();
+      let array = await sequelize.models.Bank.findAll(
+        
+      );
       console.log(array);
       let temp = [];
       array.forEach((element) => {
@@ -48,6 +50,7 @@ class BankDTO {
         },
       });
     } catch (error) {
+      console.log(error);
       throw new Error(error);
     }
   }

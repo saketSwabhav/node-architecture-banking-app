@@ -11,7 +11,7 @@ class Bank extends Model {
    */
   static associate(models) {
     // define association here
-    Bank.hasMany(models.Account);
+    Bank.hasMany(models.Account,{foreignKey:"bank_id"});
   }
 }
 Bank.init(

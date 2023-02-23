@@ -13,8 +13,9 @@ import  sequelize  from "../db.js";
       // Customer.hasMany(models.Account)
       // Customer.belongsTo(models.Account)
       Customer.hasMany(models.Account)
-      // Customer.belongsToMany(models.Bank,{through:"accounts"})
-      // Customer.hasOne(models.PassBook,{through:"accounts"})
+      Customer.belongsToMany(models.Bank,{through:"accounts"})
+      // Customer.hasOne(models.Credential, { foreignKey: "id", })
+      Customer.hasMany(models.PassBook,{foreignKey:"account_id"})
     }
   }
   Customer.init(
@@ -22,7 +23,7 @@ import  sequelize  from "../db.js";
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
-        defaultValue:DataTypes.UUIDV4,
+        // defaultValue:DataTypes.UUIDV4,
       },
       firstName: {
         type: DataTypes.STRING,
@@ -34,7 +35,19 @@ import  sequelize  from "../db.js";
       },
       totalBalance: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      password: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      roleName: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {

@@ -1,7 +1,7 @@
 import express from "express";
 import logger from "./utils/logger.utils.js";
 import { intializeApp } from "./app.js";
-import {connectToDatabase} from "./db.js";
+import {connectToDatabase} from "./models/index.js";
 
 // const res = require('express/lib/response')
 

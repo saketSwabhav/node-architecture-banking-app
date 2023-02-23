@@ -16,7 +16,7 @@ export function intializeApp(app) {
   app.use(express.urlencoded({ extended: true }));
 
   //Initial Api route
-  app.use("/api/v1", unguardedRoute);
+  app.use("/api/v1/bank-app", unguardedRoute);
 
   // Error handler
   app.use(errorHandlerMiddleware);

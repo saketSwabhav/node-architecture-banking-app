@@ -11,7 +11,7 @@ class PassBook extends Model {
   static associate(models) {
     // define association here
     // PassBook.belongsTo(models.Account)
-    // PassBook.hasOne(models.Customer)
+    PassBook.hasOne(models.Customer)
   }
 }
 PassBook.init(
@@ -26,7 +26,7 @@ PassBook.init(
       type: DataTypes.UUID,
       field: "account_id",
       references: {
-        model: "accounts", // 'banks' refers to table name
+        model: "customers", // 'banks' refers to table name
         key: "id", // 'id' refers to column name in banks table
       },
     },
@@ -37,6 +37,9 @@ PassBook.init(
         model: "customers", // 'banks' refers to table name
         key: "id", // 'id' refers to column name in banks table
       },
+    },
+    amount: {
+      type: DataTypes.INTEGER,
     },
     transactionType: DataTypes.STRING,
   },

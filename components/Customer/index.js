@@ -20,4 +20,5 @@ customerRoute.post('/:customerID/transfer',controller.transfer)
 
 customerRoute.get('/:customerID/banks/balance',controller.getbalance)
 customerRoute.get('/:customerID/passbook',controller.getPassBook)
+customerRoute.get('/:customerID',controller.getCustomer)
 

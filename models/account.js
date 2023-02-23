@@ -1,6 +1,7 @@
 "use strict";
 import { Model,DataTypes } from "sequelize";
 import  sequelize  from "../db.js";
+// import  from "./index.js";
 
   class Account extends Model {
     /**
@@ -11,6 +12,7 @@ import  sequelize  from "../db.js";
     static associate(models) {
       // Account.hasMany(models.Customer,{foreignKey:"customer_id"})
       Account.belongsTo(models.Customer)
+      // Account.belongsTo(models.Account,{foreignKey:"bank_id"})
       // Account.hasMany(models.PassBook)
       // define association here
     }

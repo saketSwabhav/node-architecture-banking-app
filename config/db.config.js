@@ -4,6 +4,7 @@ import {
   DB_PASSWORD,
   DB_NAME,
   DB_HOST,
+  DB_DIALECT,
 } from "./env.config.js";
 
 const sequelizeConfig = {
@@ -12,21 +13,21 @@ const sequelizeConfig = {
     password: DB_PASSWORD,
     database: DB_NAME,
     host: DB_HOST,
-    dialect: "postgres",
+    dialect: DB_DIALECT,
   },
   test: {
     username: DB_USER,
     password: DB_PASSWORD,
     database: DB_NAME,
     host: DB_HOST,
-    dialect: "postgres",
+    dialect: DB_DIALECT,
   },
   production: {
     username: DB_USER,
     password: DB_PASSWORD,
     database: DB_NAME,
     host: DB_HOST,
-    dialect: "postgres",
+    dialect: DB_DIALECT,
   },
 };
 

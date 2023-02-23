@@ -5,17 +5,17 @@ import Transaction from "../../../view/transaction.js";
 class CustomerService {
   constructor() {}
 
-  async addCustomer(firstName, lastName, totalBalance) {
+  async addCustomer(firstName, lastName, totalBalance,email,roleName,password) {
     try {
-      await new CustomerDTO(null,firstName, lastName, totalBalance).add();
+      await new CustomerDTO(null,firstName, lastName, totalBalance,email,password,roleName).add();
     } catch (e) {
       throw new Error(e);
     }
   }
 
-  async updateCustomer(id,firstName, lastName, totalBalance) {
+  async updateCustomer(id,firstName, lastName, totalBalance,email,password) {
     try {
-      let temp = await new CustomerDTO(id,firstName, lastName, totalBalance).update()
+      let temp = await new CustomerDTO(id,firstName, lastName, totalBalance,email,password).update()
       return temp;
     } catch (e) {
       throw new Error(e);
@@ -79,6 +79,15 @@ class CustomerService {
   async getPassBook(customerID) {
     try {
       let temp = await  CustomerDTO.getPassBook(customerID)
+      return temp
+     } catch (e) {
+      throw new Error(e)
+     }
+  }
+
+  async getCustomer(customerID) {
+    try {
+      let temp = await  CustomerDTO.getCustomer(customerID)
       return temp
      } catch (e) {
       throw new Error(e)
